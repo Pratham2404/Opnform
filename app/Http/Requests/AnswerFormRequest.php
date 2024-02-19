@@ -56,6 +56,8 @@ class AnswerFormRequest extends FormRequest
             $selectionFields = collect($this->form->properties)->filter(function ($pro) {
                 return in_array($pro['type'], ['select', 'multi_select']);
             });
+            // dd($data);
+            // dd($selectionFields[0]['multi_select']['options']);
             foreach ($selectionFields as $field){
                 if(isset($data[$field['id']]) && is_array($data[$field['id']])){
                     $data[$field['id']] = array_map(function ($val) use ($field) {
@@ -101,7 +103,7 @@ class AnswerFormRequest extends FormRequest
         if ($this->form->is_pro && $this->form->editable_submissions) {
             $this->requestRules['submission_id'] = 'string';
         }
-
+        // dd( $this->requestRules);
         return $this->requestRules;
     }
 
@@ -150,6 +152,7 @@ class AnswerFormRequest extends FormRequest
             case 'signature':
                 return ['string'];
             case 'number':
+                // dd($property['is_rating'] );
                 if ($property['is_rating'] ?? false) {
                     return ['numeric'];
                 }
@@ -170,7 +173,10 @@ class AnswerFormRequest extends FormRequest
                 return [new ValidUrl];
             case 'files':
                 $allowedFileTypes = [];
-                if(!empty($property['allowed_file_types'])){
+                // if(!empty($property['allowed_file_types'])){
+                //     $allowedFileTypes = explode(",", $property['allowed_file_types']);
+                // }
+                if (isset($property['allowed_file_types']) && is_string($property['allowed_file_types'])) {
                     $allowedFileTypes = explode(",", $property['allowed_file_types']);
                 }
                 $this->requestRules[$property['id'].'.*'] = [new StorageFile($this->maxFileSize, $allowedFileTypes, $this->form)];
@@ -180,7 +186,7 @@ class AnswerFormRequest extends FormRequest
             case 'date':
                 if (isset($property['date_range']) && $property['date_range']) {
                     $this->requestRules[$property['id'].'.*'] = $this->getRulesForDate($property);
-                    $this->requestRules[$property['id'].'.0'] = ['required_with:'.$property['id'].'.1', 'before_or_equal:'.$property['id'].'.1'];
+                $this->requestRules[$property['id'].'.0'] = ['required_with:'.$property['id'].'.1'/*, 'before_or_equal:'.$property['id'].'.1'*/];
                     $this->requestRules[$property['id'].'.1'] = ['required_with:'.$property['id'].'.0'];
                     return ['array', 'min:2'];
                 }

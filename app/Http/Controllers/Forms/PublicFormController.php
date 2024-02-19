@@ -101,10 +101,12 @@ class PublicFormController extends Controller
 
     public function fetchSubmission(Request $request, string $slug, string $submissionId)
     {
-        $submissionId = ($submissionId) ? Hashids::decode($submissionId) : false;
-        $submissionId = isset($submissionId[0]) ? $submissionId[0] : false;
+        // dd($request->all());
+        // $submissionId = ($submissionId) ? Hashids::decode($submissionId) : false;
+        // dd($submissionId);
+        // $submissionId = isset($submissionId[0]) ? $submissionId[0] : false;
         $form = Form::whereSlug($slug)->whereVisibility('public')->firstOrFail();
-        if ($form->workspace == null || !$form->editable_submissions || !$submissionId) {
+        if ($form->workspace == null  || !$submissionId) {
             return $this->error([
                 'message' => 'Not allowed.',
             ]);

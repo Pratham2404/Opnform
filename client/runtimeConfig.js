@@ -1,8 +1,8 @@
 export default {
   // Keys within public, will be also exposed to the client-side
   public: {
-    apiBase: process.env.NUXT_PUBLIC_API_BASE ||'',
-    appUrl: process.env.NUXT_PUBLIC_APP_URL || '',
+    apiBase: process.env.NUXT_PUBLIC_API_BASE ||'http://127.0.0.1:8000/',
+    appUrl: process.env.NUXT_PUBLIC_APP_URL || 'http://localhost:3000/',
     env: process.env.NUXT_PUBLIC_ENV || 'local',
     hCaptchaSiteKey: process.env.NUXT_PUBLIC_H_CAPTCHA_SITE_KEY || null,
     googleAnalyticsCode: process.env.NUXT_PUBLIC_GOOGLE_ANALYTICS_CODE || null,

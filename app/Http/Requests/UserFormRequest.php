@@ -41,7 +41,7 @@ abstract class UserFormRequest extends \Illuminate\Foundation\Http\FormRequest
             'notification_body' => 'string|nullable',
             'notifications_include_submission' => 'boolean',
             'webhook_url' => 'url|nullable',
-            'use_captcha' => 'boolean',
+            'use_captcha' => 'boolean|nullable',
             'slack_webhook_url' => 'url|nullable',
             'discord_webhook_url' => 'url|nullable',
             'notification_settings' => 'nullable',

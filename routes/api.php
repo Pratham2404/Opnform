@@ -113,7 +113,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::post('/webhooks/zapier',
                 [FormZapierWebhookController::class, 'store'])->name('integrations.zapier-hooks.store');
             Route::delete('/webhooks/zapier/{id}',
-                [FormZapierWebhookController::class, 'delete'])->name('integrations.zapier-hooks.delete');
+                [FormZapierWebhookController::class, 'delete'])->name('integrations.zapier-hooks.delete');  
 
         });
     });

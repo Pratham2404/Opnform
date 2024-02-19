@@ -24,10 +24,11 @@ class WorkspaceController extends Controller
 
     public function listUsers(Request $request, $workspaceId)
     {
+        // dd($workspaceId);
         $workspace = Workspace::findOrFail($workspaceId);
         $this->authorize('view', $workspace);
-
-        return (new WorkspaceHelper($workspace))->getAllUsers();
+        
+        return (new WorkspaceHelper($workspace))->getAllUsers($workspaceId);
     }
 
     public function saveCustomDomain(CustomDomainRequest $request)

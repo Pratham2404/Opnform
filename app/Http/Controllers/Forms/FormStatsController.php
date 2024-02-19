@@ -20,12 +20,14 @@ class FormStatsController extends Controller
         $this->authorize('view', $form);
 
         $formStats = $form->statistics()->where('date','>',now()->subDays(29)->startOfDay())->get();
+        // dd($formStats);
         $periodStats = ["views" => [], "submissions" => []];
         foreach (CarbonPeriod::create(now()->subDays(29), now()) as $dateObj) {
             $date = $dateObj->format('d-m-Y');
 
             $statisticData = $formStats->where('date', $dateObj->format('Y-m-d'))->first();
             $periodStats["views"][$date] = $statisticData->data["views"] ?? 0;
+            // dd($periodStats['views'][$date]);
             $periodStats["submissions"][$date] = $statisticData->data["submissions"] ?? 0;
 
             if($dateObj->toDateString() === now()->toDateString()){

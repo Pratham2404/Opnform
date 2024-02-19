@@ -47,7 +47,7 @@ class CleanDatabase extends Command
 
         // Form Views
         FormView::select('form_id', DB::raw('DATE(created_at) as date'), DB::raw('count(*) as views'))
-            ->where('created_at', '<', $now)
+            ->whereDate('created_at', '<', $now)
             ->orderBy('date')
             ->groupBy('form_id', 'date')
             ->get()->each(function ($row) use (&$finalData) {

@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateFormRequest;
 use App\Http\Requests\UploadAssetRequest;
 use App\Http\Resources\FormResource;
 use App\Models\Forms\Form;
+use App\Models\Store;
 use App\Models\Workspace;
 use App\Service\Forms\FormCleaner;
 use App\Service\Storage\StorageFileNameParser;
@@ -92,6 +93,46 @@ class FormController extends Controller
             ->processRequest($request)
             ->simulateCleaning($workspace)
             ->getData();
+
+            for ($i = 0; $i < count($formData['properties']); $i++) {
+                if(isset($formData['properties'][$i]['is_rating']) && $formData['properties'][$i]['is_rating']){
+                    $formData['properties'][$i]['rating_max_value']=5;
+                }
+                $property = &$formData['properties'][$i]; // Using reference to update the original array
+                // Check if auto_fill_data is set and not equal to 'static'
+                if (isset($property['auto_fill_data']) && $property['auto_fill_data'] == 'store') {
+                    // Assuming your query and logic are correct, and you want to fill options for multi_select type
+                    if ($property['type'] === 'multi_select' ||$property['type'] === 'select') {
+                        $users = Store::select('name', 'ws_alternate_code')->get();
+                        $options = [];
+                        foreach ($users as $user) {
+                            $options[] = ["name" => $user->name, "value" => $user->ws_alternate_code];
+                        }
+                        $property[$property['type']]['options'] = $options;
+                    }
+                    // Add more conditions for other types if needed
+                }
+            }
+        // for ($i = 0; $i < count($formData['properties']); $i++) {
+        //     if(isset($formData['properties'][$i]['is_rating']) && $formData['properties'][$i]['is_rating']){
+        //         // dd($formData['properties'][$i]['is_rating']);
+        //         $formData['properties'][$i]['rating_max_value'] = 5;
+        //     }
+        //     if(isset($formData['properties'][$i]['is_scale']) && $formData['properties'][$i]['is_scale']){
+        //         // dd($formData['properties'][$i]['is_rating']);
+        //         $formData['properties'][$i]['scale_max_value'] = 5;
+        //     }
+        // }
+            
+
+        // $form = $request->all();
+        // $properties = $form['properties'];
+        // $d = [];
+        // // dd($properties[0]['select']['options']);
+        // $i = 0;
+        // foreach ($properties as $property) {
+
+        
 
         $form = Form::create(array_merge($formData, [
             'creator_id' => $request->user()->id

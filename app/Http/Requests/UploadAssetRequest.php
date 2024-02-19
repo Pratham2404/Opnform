@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UploadAssetRequest extends FormRequest
 {
-    const FORM_ASSET_MAX_SIZE = 5000000;
+    const FORM_ASSET_MAX_SIZE = 50000000;
 
     /**
      * Get the validation rules that apply to the request.
@@ -22,7 +22,8 @@ class UploadAssetRequest extends FormRequest
             'jpg',
             'bmp',
             'gif',
-            'svg'
+            'svg',
+            'mp4'
         ];
         if ($this->offsetExists('type') && $this->get('type') === 'files') {
             $fileTypes = [];
